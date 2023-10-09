@@ -25,7 +25,7 @@ import javax.sql.DataSource;
  */
 @Configuration(proxyBeanMethods = false)
 @MapperScan(basePackages = MySqlDataSourceConfig.MAPPER_PACKAGE, sqlSessionFactoryRef = MySqlDataSourceConfig.SESSION_FACTORY_NAME)
-public class MySqlDataSourceConfig {
+public class MySqlDataSourceConfig extends AbstractMybatisConfig{
     static final String DATA_SOURCE_NAME = "mysqlDataSource";
     static final String MAPPER_PACKAGE = "com.terryliu.springbootmultipledatasources.mapper.mysql";
     static final String SESSION_FACTORY_NAME = "mysqlSqlSessionFactory";
@@ -50,10 +50,6 @@ public class MySqlDataSourceConfig {
             dataSource.setPoolName(dataSourceProperties.getName());
         }
         return dataSource;
-    }
-
-    protected <T extends DataSource> T createDataSource(DataSourceProperties properties, Class<T> type) {
-        return properties.initializeDataSourceBuilder().type(type).build();
     }
 
     @Bean(name = SESSION_FACTORY_NAME)

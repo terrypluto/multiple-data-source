@@ -25,7 +25,7 @@ import javax.sql.DataSource;
  */
 @Configuration(proxyBeanMethods = false)
 @MapperScan(basePackages = PostGreSqlDataSourceConfig.MAPPER_PACKAGE, sqlSessionFactoryRef = PostGreSqlDataSourceConfig.SESSION_FACTORY_NAME)
-public class PostGreSqlDataSourceConfig {
+public class PostGreSqlDataSourceConfig extends AbstractMybatisConfig{
     static final String DATA_SOURCE_NAME = "postgresDataSource";
     static final String MAPPER_PACKAGE = "com.terryliu.springbootmultipledatasources.mapper.postgres";
     static final String SESSION_FACTORY_NAME = "postgresSqlSessionFactory";
@@ -49,11 +49,6 @@ public class PostGreSqlDataSourceConfig {
         }
         return dataSource;
     }
-
-    protected <T extends DataSource> T createDataSource(DataSourceProperties properties, Class<T> type) {
-        return properties.initializeDataSourceBuilder().type(type).build();
-    }
-
 
     @Bean(name = SESSION_FACTORY_NAME)
     public SqlSessionFactory postgreSqlSessionFactory(@Qualifier(DATA_SOURCE_NAME) DataSource dataSource) throws Exception {
