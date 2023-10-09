@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.terryliu.springbootmultipledatasources.mapper.mysql.AiDeviceMapper">
+    <resultMap id="BaseResultMap" type="com.terryliu.springbootmultipledatasources.domain.AiDeviceVO">
+        <id column="device_id" jdbcType="VARCHAR" property="deviceId"/>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="applicant_id" jdbcType="INTEGER" property="applicantId"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="product_code_id" jdbcType="VARCHAR" property="productCodeId"/>
+        <result column="decision_date" jdbcType="DATE" property="decisionDate"/>
+        <result column="notes" jdbcType="VARCHAR" property="notes"/>
+    </resultMap>
+
+    <select id="getAiDevices" resultMap="BaseResultMap">
+        SELECT
+            device.id device_id,
+            device.device_name,
+            applicant_id,
+            company.name company_name,
+            device_product_code.product_code_id,
+            device.decision_date,
+            ai_device.notes
+        FROM
+            ai_device
+                LEFT JOIN
+            device ON ai_device.device_id = device.id
+                LEFT JOIN
+            company ON device.applicant_id = company.id
+                LEFT JOIN
+            device_product_code ON device_product_code.device_id = device.id
+                AND device_product_code.is_primary = TRUE
+        <if test="limit != null">
+            limit #{limit,jdbcType=INTEGER}
+        </if>
+    </select>
+</mapper>

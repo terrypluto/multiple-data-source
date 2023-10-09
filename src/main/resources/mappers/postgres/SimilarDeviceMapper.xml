@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.terryliu.springbootmultipledatasources.mapper.postgres.SimilarDeviceMapper">
+    <resultMap id="BaseResultMap" type="com.terryliu.springbootmultipledatasources.domain.DeviceSimilarity">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="cosine_similarity" jdbcType="FLOAT" property="cosineSimilarity"/>
+    </resultMap>
+
+    <select id="querySimilarity" resultMap="BaseResultMap">
+        <![CDATA[
+         SELECT id, 1 - (embedding<=> #{vector,typeHandler=com.terryliu.springbootmultipledatasources.handlers.VectorHandler}) AS cosine_similarity FROM usfda_device ORDER BY cosine_similarity DESC
+        LIMIT 10
+        ]]>
+    </select>
+</mapper>

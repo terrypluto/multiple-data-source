@@ -1,0 +1,30 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    mysql:
+      name: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: device_searching
+      password: 24f3e194![
+      url: jdbc:mysql://rm-bp1571oz5n624dz4bfo.mysql.rds.aliyuncs.com:3306/usfda?useUnicode=true&useSSL=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&allowMultiQueries=true
+      hikari:
+        maximum-pool-size: 12
+        connection-timeout: 60000
+        minimum-idle: 10
+        idle-timeout: 500000
+        max-lifetime: 540000
+        connection-test-query: SELECT 1
+    postgres:
+      name: postgre-sql
+      driver-class-name: org.postgresql.Driver
+      username: omoptest
+      password: j2OR4rrFHt@8
+      url: jdbc:postgresql://pgm-bp1891c4448of47amo.rwlb.rds.aliyuncs.com:5432/device_embedding
+      hikari:
+        maximum-pool-size: 12
+        connection-timeout: 60000
+        minimum-idle: 10
+        idle-timeout: 500000
+        max-lifetime: 540000
+        connection-test-query: SELECT 1
