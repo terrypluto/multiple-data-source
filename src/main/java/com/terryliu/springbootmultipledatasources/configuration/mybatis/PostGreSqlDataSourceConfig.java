@@ -37,12 +37,12 @@ public class PostGreSqlDataSourceConfig {
 
     @ConfigurationProperties(prefix = DATA_SOURCE_PROPERTY_PREFIX)
     @Bean(PROPERTY_NAME)
-    public DataSourceProperties postgreProperties() {
+    public DataSourceProperties postgresProperties() {
         return new DataSourceProperties();
     }
 
     @Bean(name = DATA_SOURCE_NAME)
-    public DataSource postgreDataSource(@Qualifier(PROPERTY_NAME) DataSourceProperties properties) {
+    public DataSource postgresDataSource(@Qualifier(PROPERTY_NAME) DataSourceProperties properties) {
         HikariDataSource dataSource = createDataSource(properties, PgVectorDataSource.class);
         if (StringUtils.hasText(properties.getName())) {
             dataSource.setPoolName(properties.getName());
@@ -50,8 +50,8 @@ public class PostGreSqlDataSourceConfig {
         return dataSource;
     }
 
-    protected <T> T createDataSource(DataSourceProperties properties, Class<? extends DataSource> type) {
-        return (T) properties.initializeDataSourceBuilder().type(type).build();
+    protected <T extends DataSource> T createDataSource(DataSourceProperties properties, Class<T> type) {
+        return properties.initializeDataSourceBuilder().type(type).build();
     }
 
 
@@ -64,7 +64,7 @@ public class PostGreSqlDataSourceConfig {
     }
 
     @Bean(name = TRANSACTION_MANAGER_NAME)
-    public DataSourceTransactionManager postgreTransactionManager(@Qualifier(DATA_SOURCE_NAME) DataSource dataSource) {
+    public DataSourceTransactionManager postgresTransactionManager(@Qualifier(DATA_SOURCE_NAME) DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 

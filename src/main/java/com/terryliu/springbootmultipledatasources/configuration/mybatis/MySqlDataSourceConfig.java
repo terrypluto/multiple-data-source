@@ -52,8 +52,8 @@ public class MySqlDataSourceConfig {
         return dataSource;
     }
 
-    protected <T> T createDataSource(DataSourceProperties properties, Class<? extends DataSource> type) {
-        return (T) properties.initializeDataSourceBuilder().type(type).build();
+    protected <T extends DataSource> T createDataSource(DataSourceProperties properties, Class<T> type) {
+        return properties.initializeDataSourceBuilder().type(type).build();
     }
 
     @Bean(name = SESSION_FACTORY_NAME)
