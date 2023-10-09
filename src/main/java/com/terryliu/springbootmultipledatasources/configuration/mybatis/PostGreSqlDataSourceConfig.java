@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.util.StringUtils;
 
@@ -25,7 +26,7 @@ import javax.sql.DataSource;
  */
 @Configuration(proxyBeanMethods = false)
 @MapperScan(basePackages = PostGreSqlDataSourceConfig.MAPPER_PACKAGE, sqlSessionFactoryRef = PostGreSqlDataSourceConfig.SESSION_FACTORY_NAME)
-public class PostGreSqlDataSourceConfig extends AbstractMybatisConfig{
+public class PostGreSqlDataSourceConfig extends AbstractDataSourceConfig {
     static final String DATA_SOURCE_NAME = "postgresDataSource";
     static final String MAPPER_PACKAGE = "com.terryliu.springbootmultipledatasources.mapper.postgres";
     static final String SESSION_FACTORY_NAME = "postgresSqlSessionFactory";
@@ -34,6 +35,7 @@ public class PostGreSqlDataSourceConfig extends AbstractMybatisConfig{
     static final String DATA_SOURCE_PROPERTY_PREFIX = "spring.datasource.postgres";
     static final String XML_PATH_PATTERN = "classpath:mappers/postgres/*Mapper.xml";
     static final String PROPERTY_NAME = "postgresProperties";
+    static final String TEMPLATE_NAME = "postgresTemplate";
 
     @ConfigurationProperties(prefix = DATA_SOURCE_PROPERTY_PREFIX)
     @Bean(PROPERTY_NAME)
@@ -66,5 +68,10 @@ public class PostGreSqlDataSourceConfig extends AbstractMybatisConfig{
     @Bean(name = SESSION_TEMPLATE_NANE)
     public SqlSessionTemplate postgreSqlSessionTemplate(@Qualifier(SESSION_FACTORY_NAME) SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+    @Bean(name = TEMPLATE_NAME)
+    public JdbcTemplate postgreSqljdbcTemplate(@Qualifier(DATA_SOURCE_NAME) DataSource dataSource){
+        return new JdbcTemplate(dataSource);
     }
 }

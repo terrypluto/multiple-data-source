@@ -10,7 +10,7 @@ import javax.sql.DataSource;
  * @date 2023/10/9
  * @description AbstractMybatisConfig
  */
-public abstract class AbstractMybatisConfig {
+public abstract class AbstractDataSourceConfig {
     protected <T extends DataSource> T createDataSource(DataSourceProperties properties, Class<T> type) {
         return properties.initializeDataSourceBuilder().type(type).build();
     }

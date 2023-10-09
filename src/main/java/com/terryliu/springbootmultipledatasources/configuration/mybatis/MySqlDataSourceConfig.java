@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.util.StringUtils;
 
@@ -25,7 +26,7 @@ import javax.sql.DataSource;
  */
 @Configuration(proxyBeanMethods = false)
 @MapperScan(basePackages = MySqlDataSourceConfig.MAPPER_PACKAGE, sqlSessionFactoryRef = MySqlDataSourceConfig.SESSION_FACTORY_NAME)
-public class MySqlDataSourceConfig extends AbstractMybatisConfig{
+public class MySqlDataSourceConfig extends AbstractDataSourceConfig {
     static final String DATA_SOURCE_NAME = "mysqlDataSource";
     static final String MAPPER_PACKAGE = "com.terryliu.springbootmultipledatasources.mapper.mysql";
     static final String SESSION_FACTORY_NAME = "mysqlSqlSessionFactory";
@@ -33,9 +34,8 @@ public class MySqlDataSourceConfig extends AbstractMybatisConfig{
     static final String SESSION_TEMPLATE_NANE = "mysqlSqlSessionTemplate";
     static final String DATA_SOURCE_PROPERTY_PREFIX = "spring.datasource.mysql";
     static final String XML_PATH_PATTERN = "classpath:mappers/mysql/*Mapper.xml";
-
     static final String PROPERTY_NAME = "mysqlProperties";
-
+    static final String TEMPLATE_NAME = "mysqlTemplate";
 
     @ConfigurationProperties(prefix = DATA_SOURCE_PROPERTY_PREFIX)
     @Bean(PROPERTY_NAME)
@@ -73,4 +73,8 @@ public class MySqlDataSourceConfig extends AbstractMybatisConfig{
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
+    @Bean(name = TEMPLATE_NAME)
+    public JdbcTemplate postgreSqljdbcTemplate(@Qualifier(DATA_SOURCE_NAME) DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }
 }
